@@ -505,7 +505,9 @@ bool CParticleFilter::copyCurrentScanToGPU(pcl::PointCloud<Semantic::PointXYZL> 
 
 bool CParticleFilter::transformCurrentScan(Eigen::Affine3f matrix)
 {
-	if(cudaMemcpy(this->d_m, matrix.data(), 16*sizeof(float),cudaMemcpyHostToDevice)!= ::cudaSuccess)
+	const Eigen::Matrix4f &m = matrix.matrix();
+
+	if(cudaMemcpy(this->d_m, m.data(), 16*sizeof(float),cudaMemcpyHostToDevice)!= ::cudaSuccess)
 	{
 		return false;
 	}
